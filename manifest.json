@@ -1,0 +1,16 @@
+﻿{
+  "name": "Matematik Macerası",
+  "short_name": "Matematik",
+  "description": "Eğlenceli Çocuk Matematik Oyunu",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#4bb9f8",
+  "theme_color": "#4bb9f8",
+  "icons": [
+    {
+      "src": "assets/images/duck.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

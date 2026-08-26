@@ -1,0 +1,152 @@
+﻿/**
+ * Matematik Macerası - Mobil, Tablet ve Masaüstü Responsive Uyumluluk
+ */
+
+@media (max-width: 768px) {
+    #app {
+        padding: 10px;
+    }
+
+    .game-card {
+        padding: 20px 16px;
+        border-radius: 22px;
+        border-width: 4px;
+    }
+
+    .game-logo-title {
+        font-size: 2.4rem;
+    }
+
+    .screen-title {
+        font-size: 1.8rem;
+    }
+
+    /* Sınıf Kartları 2 Sütun */
+    .grade-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* İşlem Kartları 2 Sütun */
+    .operation-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .op-card-mixed {
+        grid-column: span 2;
+    }
+
+    /* Zorluk Kartları Tek Sütun veya 3'lü sıkışık */
+    .difficulty-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Harita Kartları Tek Sütun */
+    .map-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    /* İlerlemem Özeti 2 Sütun */
+    .stats-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* Nasıl Oynanır Tek Sütun */
+    .tutorial-steps-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Oyun Arenası Sayı Blokları */
+    .equation-container {
+        gap: 8px;
+        margin: 14px 0;
+    }
+
+    .equation-block, .number-block {
+        min-width: 68px;
+        height: 68px;
+        border-radius: 18px;
+    }
+
+    .equation-block .block-number, .number-block .block-number {
+        font-size: 2rem;
+    }
+
+    .equation-sign {
+        font-size: 2.2rem;
+    }
+
+    .target-block {
+        min-width: 76px;
+        height: 76px;
+    }
+
+    /* Cevap Blokları */
+    .options-grid {
+        gap: 12px;
+        max-width: 100%;
+    }
+
+    .answer-block {
+        min-width: 100px;
+        height: 76px;
+    }
+
+    .answer-block .block-number {
+        font-size: 2.2rem;
+    }
+
+    /* Maskot & Konuşma Balonu */
+    .mascot-img {
+        width: 90px;
+    }
+
+    .speech-bubble {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+        max-width: 200px;
+    }
+
+    .game-top-bar {
+        padding: 8px 12px;
+    }
+
+    .btn-3d {
+        font-size: 1.15rem;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 420px) {
+    .game-logo-title {
+        font-size: 2rem;
+    }
+
+    .equation-block, .number-block {
+        min-width: 58px;
+        height: 58px;
+        border-radius: 14px;
+    }
+
+    .equation-block .block-number, .number-block .block-number {
+        font-size: 1.7rem;
+    }
+
+    .equation-sign {
+        font-size: 1.8rem;
+    }
+
+    .answer-block {
+        min-width: 80px;
+        height: 68px;
+    }
+
+    .answer-block .block-number {
+        font-size: 1.9rem;
+    }
+}

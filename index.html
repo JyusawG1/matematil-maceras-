@@ -1,0 +1,448 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Matematik Macerası - Eğlenceli Matematik Oyunu</title>
+    <meta name="description" content="İlkokul ve ortaokul öğrencileri için toplama, çıkarma, çarpma ve bölme işlemlerini öğreten interaktif 3D matematik eğitim oyunu.">
+        <meta name="theme-color" content="#4bb9f8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Matematik Macerası">
+    <link rel="apple-touch-icon" href="assets/images/duck.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- CSS Dosyaları -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/blocks.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <!-- Konfeti Efekt Katmanı -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <div id="app">
+
+        <!-- ================= 0. SPLASH / YÜKLENİYOR EKRANI ================= -->
+        <section id="screen-splash" class="game-screen screen-active">
+            <div class="game-card splash-card">
+                <img src="assets/images/duck.png" alt="Ördek Maskotu" class="splash-duck duck-happy">
+                <h1 class="splash-title">MATEMATİK MACERASI</h1>
+                <p class="splash-subtitle">Matematik dünyası hazırlanıyor... 🐥</p>
+                <div class="loading-bar-track">
+                    <div class="loading-bar-fill"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 1. ANA MENÜ EKRANI ================= -->
+        <section id="screen-menu" class="game-screen">
+            <div class="game-card">
+                <header class="menu-header">
+                    <h1 class="game-logo-title">MATEMATİK MACERASI</h1>
+                    <p class="game-logo-subtitle">Öğren, Çöz, Keşfet! 🌟</p>
+                    <div class="menu-badges-row">
+                        <span id="menuGradeBadge" class="pill-badge">🎓 3. Sınıf</span>
+                        <span id="menuStarsBadge" class="pill-badge">⭐ 0 Yıldız</span>
+                    </div>
+                </header>
+
+                <div class="menu-mascot-wrapper">
+                    <img id="menuDuck" src="assets/images/duck.png" alt="Ördek Maskot" class="mascot-img duck-idle">
+                    <div id="menuDuckBubble" class="speech-bubble bubble-show">
+                        Hoş geldin! Maceraya hazır mısın? 🐥
+                    </div>
+                </div>
+
+                <div class="menu-buttons-list">
+                    <button id="btnMenuPlay" class="btn-3d btn-primary menu-btn-main">
+                        <span>🚀 OYUNA BAŞLA</span>
+                    </button>
+                    <button id="btnMenuMap" class="btn-3d btn-secondary">
+                        <span>🗺️ MACERA HARİTASI</span>
+                    </button>
+                    <button id="btnMenuProgress" class="btn-3d btn-green">
+                        <span>📊 İLERLEMEM & RAPOR</span>
+                    </button>
+                    <button id="btnMenuTutorial" class="btn-3d btn-secondary">
+                        <span>📖 NASIL OYNANIR?</span>
+                    </button>
+                    <button id="btnMenuSettings" class="btn-3d btn-secondary">
+                        <span>⚙️ AYARLAR</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. SINIF SEÇİMİ EKRANI ================= -->
+        <section id="screen-grade" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                    <h2 class="screen-title">Sınıfını Seç 🎓</h2>
+                    <div style="width: 52px;"></div>
+                </header>
+
+                <div id="gradeSelectionGrid" class="grade-grid">
+                    <!-- Dinamik olarak 1-8. sınıf kartları doldurulur -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. İŞLEM SEÇİMİ EKRANI ================= -->
+        <section id="screen-operation" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-back" title="Geri">←</button>
+                    <h2 class="screen-title">İşlem Seç 🎯</h2>
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                </header>
+
+                <div class="operation-grid">
+                    <button id="btnOp_addition" class="op-card">
+                        <span class="op-icon">➕</span>
+                        <span class="op-name">TOPLAMA</span>
+                    </button>
+                    <button id="btnOp_subtraction" class="op-card">
+                        <span class="op-icon">➖</span>
+                        <span class="op-name">ÇIKARMA</span>
+                    </button>
+                    <button id="btnOp_multiplication" class="op-card">
+                        <span class="op-icon">✖️</span>
+                        <span class="op-name">ÇARPMA</span>
+                    </button>
+                    <button id="btnOp_division" class="op-card">
+                        <span class="op-icon">➗</span>
+                        <span class="op-name">BÖLME</span>
+                    </button>
+                    <button id="btnOp_mixed" class="op-card op-card-mixed">
+                        <span class="op-icon">🎲</span>
+                        <span class="op-name">KARIŞIK DÖRT İŞLEM</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. ZORLUK SEÇİMİ EKRANI ================= -->
+        <section id="screen-difficulty" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-back" title="Geri">←</button>
+                    <h2 class="screen-title">Zorluk Derecesi 🌱</h2>
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                </header>
+
+                <div class="difficulty-grid">
+                    <button id="btnDiff_easy" class="diff-card diff-card-easy">
+                        <div class="diff-icon">🌱</div>
+                        <div class="diff-title">KOLAY</div>
+                        <div class="diff-desc">Temel ve ısınma işlemleri</div>
+                    </button>
+                    <button id="btnDiff_medium" class="diff-card diff-card-medium">
+                        <div class="diff-icon">⚡</div>
+                        <div class="diff-title">ORTA</div>
+                        <div class="diff-desc">Dengeli ve düşündürücü</div>
+                    </button>
+                    <button id="btnDiff_hard" class="diff-card diff-card-hard">
+                        <div class="diff-icon">🔥</div>
+                        <div class="diff-title">ZOR</div>
+                        <div class="diff-desc">Zihinsel hız maratonu</div>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. MACERA HARİTASI (SEVİYELER) ================= -->
+        <section id="screen-map" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                    <h2 class="screen-title">Macera Haritası 🗺️</h2>
+                    <div style="width: 52px;"></div>
+                </header>
+
+                <div id="adventureMapGrid" class="map-grid">
+                    <!-- Dinamik olarak 6 harita adası yerleştirilir -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 6. OYUN ARENASI (SORU / CEVAP) ================= -->
+        <section id="screen-game" class="game-screen">
+            <div class="game-card">
+                <!-- Üst Bilgi Çubuğu -->
+                <div class="game-top-bar">
+                    <div class="top-bar-left">
+                        <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                        <span id="gameLevelBadge" class="pill-badge">Toplama</span>
+                    </div>
+
+                    <div class="round-progress-wrapper" title="Bölüm İlerlemesi">
+                        <div id="gameProgressBar" class="round-progress-fill"></div>
+                    </div>
+
+                    <div class="top-bar-right">
+                        <span id="gameQuestionCounter" class="pill-badge">1 / 10</span>
+                        <span id="gameScoreDisplay" class="pill-badge" style="background: #fff8e1; color: #f57f17;">⭐ 0</span>
+                        <span id="gameStreakDisplay" class="streak-flame-badge" style="display: none;">🔥 2x Seri</span>
+                        <button id="quickSoundToggle" class="btn-3d btn-secondary btn-icon-round" title="Ses Aç/Kapat">🔊</button>
+                    </div>
+                </div>
+
+                <!-- Maskot ve Konuşma Alanı -->
+                <div class="game-mascot-arena">
+                    <img id="gameDuck" src="assets/images/duck.png" alt="Ördek Maskot" class="mascot-img duck-idle">
+                    <div id="gameDuckBubble" class="speech-bubble bubble-show">
+                        Hadi bakalım, sıradaki soru! 🐥
+                    </div>
+                </div>
+
+                <!-- Matematik İşlem Blokları (Örn: 7 + 5 = ?) -->
+                <div class="equation-container">
+                    <div id="blockOp1" class="number-block equation-block">
+                        <span class="block-shine"></span>
+                        <span class="block-number">7</span>
+                    </div>
+                    <div id="blockSign" class="equation-sign">+</div>
+                    <div id="blockOp2" class="number-block equation-block">
+                        <span class="block-shine"></span>
+                        <span class="block-number">5</span>
+                    </div>
+                    <div id="blockEquals" class="equation-sign">=</div>
+                    <div id="blockTarget" class="number-block target-block">
+                        <span class="block-number target-question">?</span>
+                    </div>
+                </div>
+
+                <!-- 4 Adet 3D Sayı Seçenek Bloğu -->
+                <div id="gameOptionsGrid" class="options-grid">
+                    <!-- Dinamik olarak 4 adet 3D mavi blok yerleştirilir -->
+                </div>
+
+                <!-- Alt Eylem Butonları -->
+                <div class="game-actions-bar">
+                    <button id="gameHintBtn" class="btn-3d btn-hint">
+                        <span>💡 İPUCU İSTE (-2 Puan)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 7. BÖLÜM SONU / SONUÇ EKRANI ================= -->
+        <section id="screen-results" class="game-screen">
+            <div class="game-card">
+                <div id="resultsStarsDisplay" class="results-stars">
+                    ⭐⭐⭐
+                </div>
+                <h2 id="resultsTitleText" class="screen-title" style="color: #ff9800;">TEBRİKLER! 🎉</h2>
+
+                <div class="menu-mascot-wrapper" style="margin: 16px 0;">
+                    <img id="resultsDuck" src="assets/images/duck.png" alt="Ördek Maskot" class="mascot-img duck-celebrate">
+                </div>
+
+                <div class="results-stats-box">
+                    <div class="result-stat-item">
+                        <span class="result-stat-label">Toplam Puan</span>
+                        <span id="resultsScoreText" class="result-stat-value">100</span>
+                    </div>
+                    <div class="result-stat-item">
+                        <span class="result-stat-label">Başarı Oranı</span>
+                        <span id="resultsAccuracyText" class="result-stat-value">%100</span>
+                    </div>
+                    <div class="result-stat-item">
+                        <span class="result-stat-label">Doğru Sayısı</span>
+                        <span id="resultsCorrectText" class="result-stat-value" style="color: #2e7d32;">10 / 10</span>
+                    </div>
+                    <div class="result-stat-item">
+                        <span class="result-stat-label">Yanlış Sayısı</span>
+                        <span id="resultsWrongText" class="result-stat-value" style="color: #c62828;">0 / 10</span>
+                    </div>
+                    <div class="result-stat-item" style="grid-column: span 2;">
+                        <span class="result-stat-label">En Yüksek Seri</span>
+                        <span id="resultsStreakText" class="result-stat-value" style="color: #e65100;">🔥 10</span>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button id="btnPlayAgain" class="btn-3d btn-primary">
+                        <span>🔄 TEKRAR OYNA</span>
+                    </button>
+                    <button id="btnNextLevel" class="btn-3d btn-green">
+                        <span>➡️ SONRAKİ BÖLÜM</span>
+                    </button>
+                    <button id="btnReturnMap" class="btn-3d btn-secondary">
+                        <span>🗺️ HARİTAYA DÖN</span>
+                    </button>
+                    <button class="btn-3d btn-secondary" data-action="go-home">
+                        <span>🏠 ANA MENÜ</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 8. İLERLEMEM & VELİ/ÖĞRETMEN RAPORU ================= -->
+        <section id="screen-progress" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                    <h2 class="screen-title">Gelişim Raporum 📊</h2>
+                    <div style="width: 52px;"></div>
+                </header>
+
+                <div class="stats-summary-grid">
+                    <div class="stat-summary-card">
+                        <div id="statTotalScore" class="stat-num">0</div>
+                        <div class="stat-label">Toplam Puan</div>
+                    </div>
+                    <div class="stat-summary-card">
+                        <div id="statTotalStars" class="stat-num">⭐ 0</div>
+                        <div class="stat-label">Toplanan Yıldız</div>
+                    </div>
+                    <div class="stat-summary-card">
+                        <div id="statAccuracy" class="stat-num">%0</div>
+                        <div class="stat-label">Genel Başarı</div>
+                    </div>
+                    <div class="stat-summary-card">
+                        <div id="statMaxStreak" class="stat-num">🔥 0</div>
+                        <div class="stat-label">En İyi Seri</div>
+                    </div>
+                </div>
+
+                <div id="statRecommendation" class="recommendation-box">
+                    Harika bir başlangıç! Düzenli pratikle tüm yıldızları toplayabilirsin 🌟
+                </div>
+
+                <div class="mastery-container">
+                    <h3 style="font-family: var(--font-heading); color: #0d47a1; margin-bottom: 12px;">İşlem Bazlı Başarı Oranları</h3>
+                    <div id="statMasteryBars">
+                        <!-- Dinamik ustalık çubukları -->
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <button class="btn-3d btn-secondary" data-action="go-home">
+                        <span>🏠 ANA MENÜYE DÖN</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 9. NASIL OYNANIR EKRANI ================= -->
+        <section id="screen-how-to-play" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                    <h2 class="screen-title">Nasıl Oynanır? 📖</h2>
+                    <div style="width: 52px;"></div>
+                </header>
+
+                <div class="tutorial-steps-grid">
+                    <div class="tutorial-step-card">
+                        <div class="step-num-badge">1</div>
+                        <div>
+                            <div class="step-content-title">Soruyu İncele 🧐</div>
+                            <div class="step-content-desc">Ekranda çıkan 3D mavi sayı bloklarındaki matematik işlemini dikkatle oku.</div>
+                        </div>
+                    </div>
+                    <div class="tutorial-step-card">
+                        <div class="step-num-badge">2</div>
+                        <div>
+                            <div class="step-content-title">Doğru Bloğu Seç 🎯</div>
+                            <div class="step-content-desc">Alttaki 4 adet mavi sayı bloğundan doğru cevabı bul ve üzerine dokun.</div>
+                        </div>
+                    </div>
+                    <div class="tutorial-step-card">
+                        <div class="step-num-badge">3</div>
+                        <div>
+                            <div class="step-content-title">Seri Yap & Puan Kazan 🔥</div>
+                            <div class="step-content-desc">Arka arkaya doğru cevaplar vererek kombo alevini yak ve ekstra bonus puan topla.</div>
+                        </div>
+                    </div>
+                    <div class="tutorial-step-card">
+                        <div class="step-num-badge">4</div>
+                        <div>
+                            <div class="step-content-title">Adaların Kilidini Aç ⭐</div>
+                            <div class="step-content-desc">Bölüm sonunda topladığın yıldızlarla haritadaki yeni adaların kilitlerini çöz!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; display: flex; justify-content: center; gap: 16px;">
+                    <button class="btn-3d btn-primary" onclick="window.AppRouter.showScreen('screen-grade')">
+                        <span>🚀 HEMEN BAŞLA</span>
+                    </button>
+                    <button class="btn-3d btn-secondary" data-action="go-home">
+                        <span>🏠 ANA MENÜ</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 10. AYARLAR EKRANI ================= -->
+        <section id="screen-settings" class="game-screen">
+            <div class="game-card">
+                <header class="screen-header">
+                    <button class="btn-3d btn-secondary btn-icon-round" data-action="go-home" title="Ana Menü">🏠</button>
+                    <h2 class="screen-title">Oyun Ayarları ⚙️</h2>
+                    <div style="width: 52px;"></div>
+                </header>
+
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <span class="setting-label">🔊 Ses Efektleri (SFX)</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="chkSoundFx" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">🎵 Neşeli Arka Plan Müziği</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="chkMusic" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span class="setting-label">✨ Sade Animasyon (Erişilebilirlik)</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="chkReducedMotion">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="margin: 16px 0;">
+                    <h4 style="font-family: var(--font-heading); color: #0d47a1; margin-bottom: 10px;">Ses Testi</h4>
+                    <div class="sound-test-row">
+                        <button id="btnTestClick" class="btn-3d btn-secondary" style="font-size: 1rem; padding: 8px 16px;">Tıklama 🔔</button>
+                        <button id="btnTestCorrect" class="btn-3d btn-green" style="font-size: 1rem; padding: 8px 16px;">Doğru 🎉</button>
+                        <button id="btnTestWrong" class="btn-3d btn-danger" style="font-size: 1rem; padding: 8px 16px;">Yanlış 🐥</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; display: flex; flex-direction: column; align-items: center; gap: 14px;">
+                    <button id="btnResetAllData" class="btn-3d btn-danger" style="font-size: 1.1rem; padding: 10px 24px;">
+                        <span>🗑️ Tüm Oyun Verilerini Sıfırla</span>
+                    </button>
+                    <button class="btn-3d btn-secondary" data-action="go-home">
+                        <span>🏠 ANA MENÜYE DÖN</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JavaScript Modülleri -->
+    <script src="js/storage.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/scoring.js"></script>
+    <script src="js/progress.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

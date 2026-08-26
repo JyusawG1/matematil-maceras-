@@ -1,0 +1,204 @@
+﻿/**
+ * Matematik Macerası - 3D Sayı Blokları ve Oyuncak UI Stilleri
+ * Referans görseldeki mavi 3D yuvarlak köşeli plastik küp ve sarı kabartmalı rakam tasarım sistemi.
+ */
+
+:root {
+    --block-blue-light: #76d3ff;
+    --block-blue-mid: #4bb9f8;
+    --block-blue-dark: #2095e6;
+    --block-blue-shadow: #146ca8;
+    --block-yellow-text: #fff142;
+    --block-yellow-shadow: #b38500;
+    --block-yellow-border: #8f6700;
+}
+
+/* 3D Mavi Sayı Bloğu Ana Sınıfı */
+.number-block {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 84px;
+    height: 84px;
+    padding: 0 16px;
+    background: linear-gradient(180deg, var(--block-blue-light) 0%, var(--block-blue-mid) 48%, var(--block-blue-dark) 100%);
+    border-radius: 22px;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    
+    /* 3D Plastik / Oyuncak Derinliği & Gölgeler */
+    box-shadow: 
+        inset 0 4px 5px rgba(255, 255, 255, 0.75),
+        inset 0 -6px 8px rgba(0, 55, 120, 0.4),
+        0 8px 0 var(--block-blue-shadow),
+        0 14px 20px rgba(0, 0, 0, 0.22);
+
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+}
+
+/* Parlak Üst Işık Yansıması */
+.block-shine {
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    right: 12px;
+    height: 36%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-radius: 16px 16px 24px 24px;
+    pointer-events: none;
+}
+
+/* Sayı / Rakam Kabartma Tipografisi */
+.block-number {
+    position: relative;
+    font-family: 'Fredoka', 'Nunito', 'Comic Neue', system-ui, -apple-system, sans-serif;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: var(--block-yellow-text);
+    line-height: 1;
+    z-index: 2;
+    
+    /* 3D Sarı Rakam Kabartması (Görsel referansındaki 3 gibi) */
+    text-shadow: 
+        0 1px 0 #fffab0,
+        0 2px 0 var(--block-yellow-shadow),
+        0 3px 0 var(--block-yellow-shadow),
+        0 4px 0 var(--block-yellow-border),
+        0 6px 10px rgba(0, 0, 0, 0.35);
+    
+    -webkit-text-stroke: 1.5px #cf9b00;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
+/* Hover ve Basılma Etkisi */
+.number-block:hover:not(:disabled) {
+    transform: translateY(-4px);
+    box-shadow: 
+        inset 0 4px 5px rgba(255, 255, 255, 0.85),
+        inset 0 -6px 8px rgba(0, 55, 120, 0.4),
+        0 12px 0 var(--block-blue-shadow),
+        0 18px 24px rgba(0, 0, 0, 0.28);
+}
+
+.number-block:active:not(:disabled) {
+    transform: translateY(6px);
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+        inset 0 -3px 5px rgba(0, 55, 120, 0.3),
+        0 2px 0 var(--block-blue-shadow),
+        0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Cevap Seçenek Izgarası İçin Bloklar */
+.answer-block {
+    min-width: 130px;
+    height: 96px;
+    font-size: 2.8rem;
+}
+
+/* Soru İşlem Blokları (Örn: 12 + 8 = ?) */
+.equation-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.equation-block {
+    min-width: 90px;
+    height: 90px;
+    pointer-events: none;
+}
+
+.equation-sign {
+    font-family: 'Fredoka', 'Nunito', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #ffffff;
+    padding: 0 4px;
+    text-shadow: 
+        0 2px 0 #1b6fb3,
+        0 4px 0 #0f4877,
+        0 6px 12px rgba(0, 0, 0, 0.4);
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25));
+}
+
+/* Hedef Soru Kutusu (?) */
+.target-block {
+    background: linear-gradient(180deg, #ffffff 0%, #e3f2fd 100%);
+    box-shadow: 
+        inset 0 4px 5px rgba(255, 255, 255, 0.9),
+        inset 0 -6px 8px rgba(100, 150, 200, 0.3),
+        0 8px 0 #90caf9,
+        0 14px 20px rgba(0, 0, 0, 0.2);
+    min-width: 96px;
+    height: 96px;
+}
+
+.target-block .target-question {
+    color: #2196f3;
+    -webkit-text-stroke: 1.5px #1565c0;
+    text-shadow: 0 2px 0 #bbdefb, 0 4px 0 #1565c0;
+    animation: targetPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes targetPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Doğru Cevap Verildiğinde */
+.correct-block {
+    background: linear-gradient(180deg, #8ae253 0%, #68c832 50%, #47a31b 100%) !important;
+    box-shadow: 
+        inset 0 4px 5px rgba(255, 255, 255, 0.8),
+        inset 0 -6px 8px rgba(20, 80, 10, 0.4),
+        0 8px 0 #2d6b10,
+        0 14px 22px rgba(71, 163, 27, 0.45) !important;
+    animation: correctCelebration 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.correct-block .block-number {
+    color: #ffffff;
+    -webkit-text-stroke: 1.5px #1b4908;
+    text-shadow: 0 2px 0 #2d6b10, 0 4px 0 #1b4908;
+}
+
+/* Yanlış Cevap Verildiğinde */
+.wrong-block {
+    background: linear-gradient(180deg, #ffa887 0%, #f9714b 50%, #e04b21 100%) !important;
+    box-shadow: 
+        inset 0 4px 5px rgba(255, 255, 255, 0.7),
+        inset 0 -6px 8px rgba(100, 20, 10, 0.4),
+        0 6px 0 #a32d0e,
+        0 10px 16px rgba(224, 75, 33, 0.35) !important;
+    animation: softShake 0.4s ease forwards;
+    opacity: 0.75;
+}
+
+.wrong-block .block-number {
+    color: #ffffff;
+    -webkit-text-stroke: 1.5px #6d1a05;
+    text-shadow: 0 2px 0 #a32d0e, 0 4px 0 #6d1a05;
+}
+
+/* Doğru cevaplanan kutunun açılması */
+.block-revealed {
+    background: linear-gradient(180deg, #8ae253 0%, #68c832 50%, #47a31b 100%) !important;
+    box-shadow: 
+        inset 0 4px 5px rgba(255, 255, 255, 0.8),
+        inset 0 -6px 8px rgba(20, 80, 10, 0.4),
+        0 8px 0 #2d6b10,
+        0 14px 22px rgba(71, 163, 27, 0.45) !important;
+}
+
+.block-revealed .block-number {
+    color: #ffffff !important;
+    -webkit-text-stroke: 1.5px #1b4908 !important;
+    text-shadow: 0 2px 0 #2d6b10, 0 4px 0 #1b4908 !important;
+}
